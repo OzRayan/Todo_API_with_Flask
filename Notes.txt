@@ -1,0 +1,43 @@
+_______________________________________________________________________
+#: 1. This API is versioned, all routes should be prefixed with /api/v1
+
+Peewee model classes for adding, editing and deleting Todo entries.
+_________________________________________________________________________________
+#: 2. When the app first starts it will attempt to fetch all Todos in the system.
+ Handle the request and return all the Todos.
+Look at the browser tool to see what is being requested and how and create the appropriate route
+
+GET /api/v1/todos returns all todos and populates the web application
+__________________________________________________________
+#: 3. When a Todo is created and the save link is clicked,
+it will make a request to the server. Handle the request by creating a
+Todo and setting the proper status code.
+Look at the browser tool to see what is being requested and
+how and create the appropriate route
+it will make a request to the server. Handle the request by updating the existing Todo.
+
+POST /api/v1/todos creates a new Todo, returns it and sets the appropriate status code.
+___________________________________________________________________________
+#: 4. When a previously saved Todo is updated and the save link is clicked,
+Look at the browser tool to see what is being requested
+and how and create the appropriate route.
+
+PUT /api/v1/todos/XXX is handled and proper Todo is updated.
+___________________________________________________________________________
+#: 5. When a previously saved Todo is deleted and the save link is clicked,
+it will make a request to the server. Handle the deletion
+and return a blank response and the proper status code.
+
+DELETE /api/v1/todos/XXX deletes the appropriate
+Todo sends back the appropriate status code and an empty body
+________________________
+#: 6. Unit test the app.
+There are unit tests for all the views, models,
+and other functions. The tests must cover 50% of code.
+
+### EXTRA ###
+
+#: 1. Testing coverage over 75%
+
+## Changed recently(not required anymore)
+#: 2. Uses Token-Based Authentication
