@@ -122,8 +122,11 @@ class Todos(Resource):
 
 todo_api = Blueprint('resources.reviews', __name__)
 # noinspection PyTypeChecker
+# --> todo_api
 api = Api(todo_api)
 # noinspection PyTypeChecker
+# --> TodoList
 api.add_resource(TodoList, '/todos', endpoint='todos')
 # noinspection PyTypeChecker
+# --> Todos
 api.add_resource(Todos, '/todos/<int:id>', endpoint='todo')
