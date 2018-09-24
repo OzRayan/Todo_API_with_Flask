@@ -80,7 +80,6 @@ class Todo(Model):
     :inherit: Model class from peewee
     """
     name = CharField()
-    notes = TextField()
     created_at = DateTimeField(default=datetime.datetime.now)
     created_by = ForeignKeyField(User, related_name='todos_set')
 

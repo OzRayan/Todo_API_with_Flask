@@ -15,7 +15,6 @@ from models import Todo
 todo_fields = {
     'id': fields.Integer,
     'name': fields.String,
-    'description': fields.String,
     'created_at': fields.DateTime
 }
 
@@ -40,12 +39,6 @@ class TodoList(Resource):
             help='No todo title was provided',
             location=['form', 'json']
         )
-        self.reqparse.add_argument(
-            'description',
-            required=True,
-            help='No description was provided',
-            location=['form', 'json'],
-        )
         super().__init__()
 
     @staticmethod
@@ -68,12 +61,6 @@ class Todos(Resource):
             required=True,
             help='No todo title was provided',
             location=['form', 'json']
-        )
-        self.reqparse.add_argument(
-            'description',
-            required=True,
-            help='No description was provided',
-            location=['form', 'json'],
         )
         super().__init__()
 
