@@ -1,3 +1,6 @@
+#: ATTENTION!! < # noinspection > prefixed comments are only
+#: for pycharm to ignore PEP 8 style highlights
+
 import json
 
 from flask import Blueprint, make_response

@@ -11,6 +11,11 @@ auth = MultiAuth(token_auth, basic_auth)
 
 @basic_auth.verify_password
 def verify_password(email_or_username, password):
+    """Verify password -
+    :decorator: - basic_auth.verify_password
+    :param: - email_or_username
+            - password
+    """
     try:
         user = User.get(
             (User.email == email_or_username) |
@@ -27,6 +32,10 @@ def verify_password(email_or_username, password):
 
 @token_auth.verify_token
 def verify_token(token):
+    """Verify token
+    :decorator: - token_auth.verify_token
+    :param: - token
+    """
     user = User.verify_auth_token(token)
     if user is not None:
         g.user = user
