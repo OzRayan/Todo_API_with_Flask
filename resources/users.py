@@ -38,7 +38,7 @@ class UserList(Resource):
         self.reqparse.add_argument(
             'verify_password',
             required=True,
-            help='No password verification was provided',
+            help='No verify password was provided',
             location=['form', 'json']
         )
         super().__init__()
@@ -54,7 +54,7 @@ class UserList(Resource):
             return marshal(user, user_field), 201
         return make_response(
             json.dumps({
-                'error': 'Password and password verification do not match'
+                'error': 'Passwords don\'t match'
             }), 400)
 
 

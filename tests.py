@@ -1,5 +1,5 @@
 import unittest
-import string
+import copy
 from playhouse.test_utils import test_database
 
 from peewee import *
@@ -25,6 +25,13 @@ class BaseTest(unittest.TestCase):
 
 
 class ModelResourcesTest(BaseTest):
+    data = {
+            'username': 'test_1',
+            'email': 'example@mail.com',
+            'password': 'password',
+            'verify_password': 'password'
+        }
+
     @staticmethod
     def create_user(prefix=None):
         User.create_user(
@@ -42,15 +49,8 @@ class ModelResourcesTest(BaseTest):
             self.assertEqual(response.status_code, 404)
 
     def test_create_new_user(self):
-        data = {
-            'username': 'rayan',
-            'email': 'example@mail.com',
-            'password': 'password',
-            'verify_password': 'password'
-        }
-
         with test_database(DB, (User,)):
-            response = self.app.post('/api/v1/users', data=data)
+            response = self.app.post('/api/v1/users', data=self.data)
             self.assertEqual(response.status_code, 404)
 
     def test_create_todo(self):
