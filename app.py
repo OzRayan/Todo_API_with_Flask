@@ -9,8 +9,8 @@ from resources.todos import todo_api
 from resources.users import users_api
 
 app = Flask(__name__)
-app.register_blueprint(todo_api, url_prefix='/api/v1/')
-app.register_blueprint(users_api, url_prefix='/api/v1/')
+app.register_blueprint(todo_api, url_prefix='/api/v1')
+app.register_blueprint(users_api, url_prefix='/api/v1')
 
 limiter = Limiter(app, global_limits=[DEFAULT_RATE], key_func=get_ipaddr)
 limiter.limit('100/day')(users_api)

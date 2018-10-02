@@ -41,8 +41,7 @@ class TodoList(Resource):
         )
         super().__init__()
 
-    @staticmethod
-    def get():
+    def get(self):
         return [marshal(todo, todo_fields) for todo in Todo.select()]
 
     @marshal_with(todo_fields)
@@ -50,7 +49,8 @@ class TodoList(Resource):
     def post(self):
         args = self.reqparse.parse_args()
         todo = Todo.create(created_by=g.user, **args)
-        return todo, 201, {'Location': url_for('resources.todos.todo', id=todo.id)}
+        return (todo, 201,
+                {'Location': url_for('resources.todos.todo', id=todo.id)})
 
 
 class Todos(Resource):
