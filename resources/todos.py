@@ -41,6 +41,7 @@ class TodoList(Resource):
         )
         super().__init__()
 
+    @auth.login_required
     def get(self):
         return [marshal(todo, todo_fields) for todo in Todo.select()]
 

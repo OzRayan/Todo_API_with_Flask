@@ -1,10 +1,10 @@
-from flask import Flask, g, jsonify, render_template
+from flask import Flask, render_template    # g, jsonify -- for token-based authentication
 from flask_limiter import Limiter
 from flask_limiter.util import get_ipaddr
 
-from auth import auth
+# from auth import auth
 from config import DEBUG, DEFAULT_RATE, HOST, PORT
-from models import initialize
+from models import initialize, User
 from resources.todos import todo_api
 from resources.users import users_api
 
@@ -22,14 +22,22 @@ limiter.limit(DEFAULT_RATE, per_method=True,
 def my_todos():
     return render_template('index.html')
 
-
-@app.route('/api/v1/users/token', methods=['GET'])
-@auth.login_required
-def get_auth_token():
-    token = g.user.generate_auth_token()
-    return jsonify({'token': token.decode('ascii')})
+# TOKEN-BASED AUTHENTICATION
+# @app.route('/api/v1/users/token', methods=['GET'])
+# @auth.login_required
+# def get_auth_token():
+#     token = g.user.generate_auth_token()
+#     return jsonify({'token': token.decode('ascii')})
 
 
 if __name__ == '__main__':
     initialize()
+    # try:
+    #     User.create_user(
+    #         username='test_user',
+    #         email='example@mail.com',
+    #         password='password'
+    #     )
+    # except ValueError:
+    #     pass
     app.run(debug=DEBUG, host=HOST, port=PORT)

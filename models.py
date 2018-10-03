@@ -4,11 +4,11 @@
 import datetime
 
 from argon2 import PasswordHasher
-from itsdangerous import (TimedJSONWebSignatureSerializer as T_jwss,
-                          BadSignature, SignatureExpired)
+# from itsdangerous import (TimedJSONWebSignatureSerializer as T_jwss,
+#                           BadSignature, SignatureExpired)
 from peewee import *
 
-from config import SECRET_KEY
+# from config import SECRET_KEY
 
 
 DATABASE = SqliteDatabase('todos.sqlite')
@@ -55,22 +55,22 @@ class User(Model):
 
     # Before unit 10 update on Treehouse, it was required,
     # It can be tested in POSTMAN, no front-end implementation to use back-end API auth
-    @staticmethod
-    def verify_auth_token(token):
-        serializer = T_jwss(SECRET_KEY)
-        try:
-            data = serializer.loads(token)
-        except (SignatureExpired, BadSignature):
-            return None
-        else:
-            # noinspection PyUnresolvedReferences
-            # --> .id
-            user = User.get(User.id == data['id'])
-            return user
-
-    def generate_auth_token(self, expires=3600):
-        serializer = T_jwss(SECRET_KEY, expires_in=expires)
-        return serializer.dumps({'id': self.id})
+    # @staticmethod
+    # def verify_auth_token(token):
+    #     serializer = T_jwss(SECRET_KEY)
+    #     try:
+    #         data = serializer.loads(token)
+    #     except (SignatureExpired, BadSignature):
+    #         return None
+    #     else:
+    #         # noinspection PyUnresolvedReferences
+    #         # --> .id
+    #         user = User.get(User.id == data['id'])
+    #         return user
+    #
+    # def generate_auth_token(self, expires=3600):
+    #     serializer = T_jwss(SECRET_KEY, expires_in=expires)
+    #     return serializer.dumps({'id': self.id})
     #######################################################
 
 
