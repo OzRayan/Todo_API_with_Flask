@@ -108,7 +108,7 @@ class Todos(Resource):
         return '', 204, {'Location': url_for('resources.todos.todo')}
 
 
-todo_api = Blueprint('resources.reviews', __name__)
+todo_api = Blueprint('resources.todos', __name__)
 # noinspection PyTypeChecker
 # --> todo_api
 api = Api(todo_api)

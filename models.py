@@ -21,7 +21,6 @@ class User(Model):
     :inherit: Model class from peewee
     """
     username = CharField(unique=True)
-    email = CharField(unique=True)
     password = CharField()
 
     class Meta:
@@ -30,14 +29,11 @@ class User(Model):
     # noinspection PyUnusedLocal
     #   --> **kwargs
     @classmethod
-    def create_user(cls, email, username, password, **kwargs):
-        email = email.lower()
+    def create_user(cls, username, password, **kwargs):
         try:
-            cls.select().where(
-                (cls.email == email) | (cls.username**username)
-            ).get()
+            cls.select().where(cls.username**username).get()
         except cls.DoesNotExist:
-            user = cls(username=username, email=email)
+            user = cls(username=username)
             user.password = user.set_password(password)
             user.save()
             return user

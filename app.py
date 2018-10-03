@@ -35,7 +35,6 @@ if __name__ == '__main__':
     # try:
     #     User.create_user(
     #         username='test_user',
-    #         email='example@mail.com',
     #         password='password'
     #     )
     # except ValueError:
