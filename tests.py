@@ -46,12 +46,12 @@ class ModelResourcesTest(BaseTest):
             self.assertEqual(len(User.select()), 1)
             response = self.app.get('/api/v1/users')
             self.assertEqual(User.select().get().username, 'test_1_user')
-            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 200)
 
     def test_create_new_user(self):
         with test_database(DB, (User,)):
             response = self.app.post('/api/v1/users', data=self.data)
-            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 201)
 
     def test_create_todo(self):
         with test_database(DB, (Todo,)):
@@ -60,7 +60,7 @@ class ModelResourcesTest(BaseTest):
             Todo.create(name='Walk Tomika', created_by=user.id)
             self.assertEqual(len(Todo.select()), 1)
             response = self.app.post('/api/v1/todos')
-            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 200)
 
 
 class ViewTest(BaseTest):

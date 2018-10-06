@@ -41,7 +41,6 @@ class TodoList(Resource):
         )
         super().__init__()
 
-    @auth.login_required
     def get(self):
         return [marshal(todo, todo_fields) for todo in Todo.select()]
 
@@ -66,19 +65,19 @@ class Todos(Resource):
         super().__init__()
 
     @marshal_with(todo_fields)
-    def get(self, todo_id):
-        return object_or_404(todo_id)
+    def get(self, id):
+        return object_or_404(id)
 
     @marshal_with(todo_fields)
     @auth.login_required
-    def put(self, todo_id):
+    def put(self, id):
         args = self.reqparse.parse_args()
         try:
             # noinspection PyUnresolvedReferences
             # --> .id
             todo = Todo.select().where(
                 Todo.created_by == g.user,
-                Todo.id == todo_id
+                Todo.id == id
             ).get()
         except Todo.DoesNotExist:
             return make_response(json.dumps(
@@ -86,29 +85,29 @@ class Todos(Resource):
                 ), 403)
         query = todo.update(**args)
         query.execute()
-        todo = object_or_404(todo_id)
+        todo = object_or_404(id)
         return (todo, 200, {
-                'Location': url_for('resources.todos.todo', id=todo_id)})
+                'Location': url_for('resources.todos.todo', id=id)})
 
     @auth.login_required
-    def delete(self, todo_id):
+    def delete(self, id):
         try:
             # noinspection PyUnresolvedReferences
             # --> .id
             todo = Todo.select().where(
                 Todo.created_by == g.user,
-                Todo.id == todo_id
+                Todo.id == id
             ).get()
         except Todo.DoesNotExist:
             return make_response(json.dumps(
-                    {'error': 'That todo does not exist or is not editable'}
+                    {'error': 'That todo does not exist or is not deletable'}
                 ), 403)
         query = todo.delete()
         query.execute()
         return '', 204, {'Location': url_for('resources.todos.todo')}
 
 
-todo_api = Blueprint('resources.reviews', __name__)
+todo_api = Blueprint('resources.todos', __name__)
 # noinspection PyTypeChecker
 # --> todo_api
 api = Api(todo_api)
