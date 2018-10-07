@@ -20,6 +20,10 @@ todo_fields = {
 
 
 def object_or_404(id):
+    """Get todo object or 404
+    :parameter: - id - todo id
+    :return: - todo object
+    """
     try:
         # noinspection PyUnresolvedReferences
         # --> .id
@@ -41,7 +45,8 @@ class TodoList(Resource):
         )
         super().__init__()
 
-    def get(self):
+    @staticmethod
+    def get():
         return [marshal(todo, todo_fields) for todo in Todo.select()]
 
     @marshal_with(todo_fields)
@@ -94,17 +99,14 @@ class Todos(Resource):
         try:
             # noinspection PyUnresolvedReferences
             # --> .id
-            todo = Todo.select().where(
-                Todo.created_by == g.user,
-                Todo.id == id
-            ).get()
+            query = Todo.delete().where(
+                Todo.created_by == g.user, Todo.id == id)
+            query.execute()
+            return '', 204
         except Todo.DoesNotExist:
             return make_response(json.dumps(
                     {'error': 'That todo does not exist or is not deletable'}
                 ), 403)
-        query = todo.delete()
-        query.execute()
-        return '', 204, {'Location': url_for('resources.todos.todo')}
 
 
 todo_api = Blueprint('resources.todos', __name__)

@@ -19,8 +19,12 @@ class User(Model):
     """
     User Model
     :inherit: Model class from peewee
+    :fields: - username - CharField(), unique
+             - email - CharField(), unique
+             password - CharField()
     """
     username = CharField(unique=True)
+    email = CharField(unique=True)
     password = CharField()
 
     class Meta:
@@ -29,11 +33,18 @@ class User(Model):
     # noinspection PyUnusedLocal
     #   --> **kwargs
     @classmethod
-    def create_user(cls, username, password, **kwargs):
+    def create_user(cls, username, email, password, **kwargs):
+        """Classmethod create user
+        :param: - username
+                - email
+                - password
+        """
+        email = email.lower()
         try:
-            cls.select().where(cls.username**username).get()
+            cls.select().where((cls.email == email) |
+                               (cls.username**username)).get()
         except cls.DoesNotExist:
-            user = cls(username=username)
+            user = cls(username=username, email=email)
             user.password = user.set_password(password)
             user.save()
             return user
@@ -42,9 +53,15 @@ class User(Model):
 
     @staticmethod
     def set_password(password):
+        """set password with PasswordHasher.hash()
+        :parameter: - password
+        :return: - hashed password"""
         return HASHER.hash(password)
 
     def verify_password(self, password):
+        """verify password with PasswordHasher.verify()
+        :parameter: - password
+        :return: - verified password"""
         # noinspection PyTypeChecker
         # --> self.password
         return HASHER.verify(self.password, password)
@@ -74,6 +91,9 @@ class Todo(Model):
     """
     Todo_s Model
     :inherit: Model class from peewee
+    :fields: - name - CharField()
+             - created_at - DateTimeField(), default now
+             - created_by - ForeignKeyField(), User
     """
     name = CharField()
     created_at = DateTimeField(default=datetime.datetime.now)
@@ -84,6 +104,7 @@ class Todo(Model):
 
 
 def initialize():
+    """Initializing DATABASE"""
     DATABASE.connect()
     DATABASE.create_tables([User, Todo], safe=True)
     DATABASE.close()
