@@ -10,8 +10,10 @@ from peewee import *
 
 # from config import SECRET_KEY
 
-
+# Database init
 DATABASE = SqliteDatabase('todos.sqlite')
+
+# PasswordHasher() instance
 HASHER = PasswordHasher()
 
 
@@ -21,7 +23,7 @@ class User(Model):
     :inherit: Model class from peewee
     :fields: - username - CharField(), unique
              - email - CharField(), unique
-             password - CharField()
+             - password - CharField()
     """
     username = CharField(unique=True)
     email = CharField(unique=True)
@@ -55,13 +57,15 @@ class User(Model):
     def set_password(password):
         """set password with PasswordHasher.hash()
         :parameter: - password
-        :return: - hashed password"""
+        :return: - hashed password
+        """
         return HASHER.hash(password)
 
     def verify_password(self, password):
         """verify password with PasswordHasher.verify()
         :parameter: - password
-        :return: - verified password"""
+        :return: - verified password
+        """
         # noinspection PyTypeChecker
         # --> self.password
         return HASHER.verify(self.password, password)
