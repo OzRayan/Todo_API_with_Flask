@@ -107,8 +107,8 @@ class Todos(Resource):
         """
         return object_or_404(id)
 
-    @marshal_with(todo_fields)
     @auth.login_required
+    @marshal_with(todo_fields)
     def put(self, id):
         """put method
         :decorators: - marshal_with from flask_restful
@@ -127,19 +127,18 @@ class Todos(Resource):
         try:
             # noinspection PyUnresolvedReferences
             # --> .id
-            todo = Todo.select().where(
+            query = Todo.update(**args).where(
                 Todo.created_by == g.user,
-                Todo.id == id
-            ).get()
+                Todo.id == id)
+            query.execute()
+            todo = object_or_404(id)
+            return (todo, 200, {
+                'Location': url_for('resources.todos.todo', id=id)})
+
         except Todo.DoesNotExist:
             return make_response(json.dumps(
                     {'error': 'That todo does not exist or is not editable'}
-                ), 403)
-        query = todo.update(**args)
-        query.execute()
-        todo = object_or_404(id)
-        return (todo, 200, {
-                'Location': url_for('resources.todos.todo', id=id)})
+                ), 404)
 
     @auth.login_required
     def delete(self, id):
@@ -157,7 +156,8 @@ class Todos(Resource):
             # noinspection PyUnresolvedReferences
             # --> .id
             query = Todo.delete().where(
-                Todo.created_by == g.user, Todo.id == id)
+                Todo.created_by == g.user,
+                Todo.id == id)
             query.execute()
             return '', 204
         except Todo.DoesNotExist:
