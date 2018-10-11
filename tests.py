@@ -83,17 +83,15 @@ class ModelResourcesTest(BaseTest):
         - test length of Todo objects, max_value should be 1
         - test status code when user is created
         """
-        with test_database(DB, (Todo,)):
+        with test_database(DB, (User, Todo,)):
             self.create_user('test_2')
             user = User.select().get()
             # Todo.create(name='Walk Tomika', created_by=user.id)
             # self.assertEqual(len(Todo.select()), 1)
-            header = {'Authorization': 'Basic ' +
-                      base64.b64encode('username:password'.encode()).decode()}
+
             self.todo_data['created_by'] = user.id
-            response = self.app.post('/api/v1/todos',
+            response = self.app.post('http://127.0.0.1:8000/api/v1/todos',
                                      data=self.todo_data)
-            self.assertTrue(type(response.data) is bytes)
             self.assertEqual(response.status_code, 200)
 
 
