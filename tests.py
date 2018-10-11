@@ -5,6 +5,7 @@ from peewee import *
 
 from app import app
 from models import Todo, User
+import base64
 
 # Database in memory
 DB = SqliteDatabase(':memory:')
@@ -43,6 +44,8 @@ class ModelResourcesTest(BaseTest):
             'password': 'password',
             'verify_password': 'password'
         }
+
+    todo_data = {'name': 'Walk Tomika and Lucky'}
 
     @staticmethod
     def create_user(prefix=None):
@@ -83,9 +86,14 @@ class ModelResourcesTest(BaseTest):
         with test_database(DB, (Todo,)):
             self.create_user('test_2')
             user = User.select().get()
-            Todo.create(name='Walk Tomika', created_by=user.id)
-            self.assertEqual(len(Todo.select()), 1)
-            response = self.app.post('/api/v1/todos')
+            # Todo.create(name='Walk Tomika', created_by=user.id)
+            # self.assertEqual(len(Todo.select()), 1)
+            header = {'Authorization': 'Basic ' +
+                      base64.b64encode('username:password'.encode()).decode()}
+            self.todo_data['created_by'] = user.id
+            response = self.app.post('/api/v1/todos',
+                                     data=self.todo_data)
+            self.assertTrue(type(response.data) is bytes)
             self.assertEqual(response.status_code, 200)
 
 
