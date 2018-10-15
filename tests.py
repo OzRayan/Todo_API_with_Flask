@@ -1,3 +1,4 @@
+import base64
 import unittest
 from playhouse.test_utils import test_database
 
@@ -5,7 +6,6 @@ from peewee import *
 
 from app import app
 from models import Todo, User
-import base64
 
 # Database in memory
 DB = SqliteDatabase(':memory:')
