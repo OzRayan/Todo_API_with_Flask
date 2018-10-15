@@ -80,19 +80,59 @@ class ModelResourcesTest(BaseTest):
 
     def test_create_todo(self):
         """todo create test
-        - test length of Todo objects, max_value should be 1
         - test status code when user is created
         """
         with test_database(DB, (User, Todo,)):
             self.create_user('test_2')
             user = User.select().get()
-            # Todo.create(name='Walk Tomika', created_by=user.id)
-            # self.assertEqual(len(Todo.select()), 1)
-
+            header = {
+                'Authorization': 'Basic ' + base64.
+                b64encode(bytes("{0}:{1}".
+                          format(user.username, 'password').encode())).decode()
+            }
             self.todo_data['created_by'] = user.id
-            response = self.app.post('http://127.0.0.1:8000/api/v1/todos',
-                                     data=self.todo_data)
+            response = self.app.post('/api/v1/todos',
+                                     data=self.todo_data, headers=header)
+            self.assertEqual(response.status_code, 201)
+
+    def test_todo_put(self):
+        """todo put test
+        - test length of Todo objects, max_value should be 1
+        - test status code when user is updated
+        """
+        with test_database(DB, (User, Todo,)):
+            self.create_user('test_2')
+            user = User.select().get()
+            Todo.create(name='Buy ', created_by=user.id)
+            self.assertEqual(len(Todo.select()), 1)
+            header = {
+                'Authorization': 'Basic ' + base64.
+                b64encode(bytes("{0}:{1}".
+                          format(user.username, 'password').encode())).decode()
+            }
+            self.todo_data['created_by'] = user.id
+            response = self.app.put('/api/v1/todos/{}'.
+                                    format(Todo.select().get().id),
+                                    data=self.todo_data, headers=header)
             self.assertEqual(response.status_code, 200)
+
+    def test_todo_delete(self):
+        """todo delete test
+        - test status code when user is deleted
+        """
+        with test_database(DB, (User, Todo,)):
+            self.create_user('test_2')
+            user = User.select().get()
+            header = {
+                'Authorization': 'Basic ' + base64.
+                b64encode(bytes("{0}:{1}".
+                          format(user.username, 'password').encode())).decode()
+            }
+            self.todo_data['created_by'] = user.id
+            response = self.app.delete('/api/v1/todos/{}'.
+                                       format(Todo.select().get().id),
+                                       data=self.todo_data, headers=header)
+            self.assertEqual(response.status_code, 204)
 
 
 class ViewTest(BaseTest):
