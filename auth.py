@@ -11,7 +11,7 @@ auth = HTTPBasicAuth()
 def verify_password(email_or_username, password):
     """Verify password -
     :decorator: - basic_auth.verify_password
-    :param: - email_or_username
+    :param: - email_or_username - for verification email or username
             - password
     """
     try:
