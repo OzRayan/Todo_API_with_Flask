@@ -123,6 +123,7 @@ class ModelResourcesTest(BaseTest):
         with test_database(DB, (User, Todo,)):
             self.create_user('test_2')
             user = User.select().get()
+            Todo.create(name='Buy ', created_by=user.id)
             header = {
                 'Authorization': 'Basic ' + base64.
                 b64encode(bytes("{0}:{1}".
