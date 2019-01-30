@@ -22,7 +22,7 @@ pycparser==2.18
 python-dateutil==2.5.3
 pytz==2016.6.1
 query-string==1.0.2
-requests==2.19.1
+requests==2.20.0
 six==1.10.0
 urllib3==1.23
 Werkzeug==0.14.1
